@@ -1,0 +1,6 @@
+@TechFolio.Server_HostAddress = http://localhost:5211
+
+GET {{TechFolio.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

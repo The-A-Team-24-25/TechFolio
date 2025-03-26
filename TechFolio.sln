@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "techfolio.client", "techfolio.client\techfolio.client.esproj", "{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechFolio.Server", "TechFolio.Server\TechFolio.Server.csproj", "{624394B1-273F-4AC4-8E36-A455F5893BD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA5808DA-07B6-CCC7-0976-F3B9C3EBFD2D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24F1F5D1-BC65-4D90-9597-DFEB63E01499}
+	EndGlobalSection
+EndGlobal
