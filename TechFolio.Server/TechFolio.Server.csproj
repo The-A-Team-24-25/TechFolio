@@ -20,6 +20,7 @@
     <ProjectReference Include="..\techfolio.client\techfolio.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="..\TechFolio.Data\TechFolio.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "techfolio.client", "techfol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechFolio.Server", "TechFolio.Server\TechFolio.Server.csproj", "{624394B1-273F-4AC4-8E36-A455F5893BD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechFolio.Data", "TechFolio.Data\TechFolio.Data.csproj", "{BBF1D964-D983-4DDE-82F9-241F33AA8541}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{624394B1-273F-4AC4-8E36-A455F5893BD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBF1D964-D983-4DDE-82F9-241F33AA8541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBF1D964-D983-4DDE-82F9-241F33AA8541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBF1D964-D983-4DDE-82F9-241F33AA8541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBF1D964-D983-4DDE-82F9-241F33AA8541}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
