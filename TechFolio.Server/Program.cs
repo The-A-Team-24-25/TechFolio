@@ -1,4 +1,7 @@
 
+using Microsoft.EntityFrameworkCore;
+using TechFolio.Server.Data;
+
 namespace TechFolio.Server
 {
     public class Program
@@ -13,6 +16,9 @@ namespace TechFolio.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlite("Data Source=app.db"));
 
             var app = builder.Build();
 
