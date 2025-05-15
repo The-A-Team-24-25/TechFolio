@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthProvider";
 import Login from "./pages/Login";
@@ -5,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import StudentProfile from "./pages/StudentProfile";
 import StudentOverviewPage from "./pages/StudentOverviewPage";
 import RegisterFromInvitation from "./components/RegisterFromInvitation";
+import FormAddAchievement from "./components/FormAddAchievement";
+import './App.css';
 
 const RequireAuth = ({ children }) => {
     const { token } = useAuth();
