@@ -1,5 +1,7 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
 import './App.css';
+import FormAddInterest from './components/FormAddInterest';
 
 function App() {
     const [forecasts, setForecasts] = useState();
@@ -45,6 +47,15 @@ function App() {
             const data = await response.json();
             setForecasts(data);
         }
+    }
+
+    function Mn() {
+        return (
+            <div>
+                <h1>Manage Interests</h1>
+                <FormAddInterest />
+            </div>
+        );
     }
 }
 
