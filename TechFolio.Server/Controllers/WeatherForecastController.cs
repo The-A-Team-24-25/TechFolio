@@ -1,32 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
+using TechFolio.Server.Services;
 
-namespace TechFolio.Server.Controllers;
-
-[ApiController]
-[Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+namespace TechFolio.Server.Controllers
 {
-    private static readonly string[] Summaries = new[]
+    [ApiController]
+    [Route("[controller]")]
+    public class WeatherForecastController : ControllerBase
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        private readonly WeatherForecastService _forecastService;
 
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
-    {
-        _logger = logger;
-    }
-
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        public WeatherForecastController(WeatherForecastService forecastService)
         {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+            _forecastService = forecastService;
+        }
+
+        [HttpGet]
+        public IEnumerable<WeatherForecast> Get()
+        {
+            return _forecastService.GetForecast();
+        }
     }
 }
