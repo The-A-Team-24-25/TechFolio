@@ -13,6 +13,7 @@ namespace TechFolio.Server.Data
 
         public DbSet<Students> Students { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Goal> Goals { get; set; }
     }
 }
 

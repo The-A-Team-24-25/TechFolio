@@ -42,6 +42,22 @@ namespace TechFolio.Server.Migrations
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                 name: "Goals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                  .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    IsApproved = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                     table.PrimaryKey("PK_Goals", x => x.Id);
+                });
+
         }
 
         /// <inheritdoc />
