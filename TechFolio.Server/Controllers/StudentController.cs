@@ -1,102 +1,114 @@
-﻿// Controllers/StudentsController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TechFolio.Data.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TechFolio.Server.Data;
+using TechFolio.Server.DTO;
+using TechFolio.Server.Models;
 
-namespace TechFolio.Server.Controllers;
-
-
-[Route("api/[controller]")]
-[ApiController]
-public class StudentsController : ControllerBase
+namespace TechFolio.Server.Controllers
 {
-    private readonly AppDbContext _context;
-
-    public StudentsController(AppDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StudentsController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly MyProfileDbContext _context;
 
-    // GET: api/Students
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Students>>> GetStudents()
-    {
-        return await _context.Students.ToListAsync();
-    }
-
-    // GET: api/Students/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Students>> GetStudent(int id)
-    {
-        var student = await _context.Students.FindAsync(id);
-
-        if (student == null)
+        public StudentsController(MyProfileDbContext context)
         {
-            return NotFound();
+            _context = context;
         }
 
-        return student;
-    }
-
-    // POST: api/Students
-    [HttpPost]
-    public async Task<ActionResult<Students>> PostStudent(Students student)
-    {
-        _context.Students.Add(student);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student);
-    }
-
-    // PUT: api/Students/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutStudent(int id, Students student)
-    {
-        if (id != student.Id)
+        // GET: api/students
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StudentDto>>> GetStudents()
         {
-            return BadRequest();
+            var students = await _context.Students
+                .Include(s => s.StudentType)
+                .Select(s => new StudentDto
+                {
+                    Id = s.Id,
+                    Name = s.Name,
+                    ProfilePictureUrl = s.ProfilePictureUrl,
+                    StudentTypeId = s.StudentTypeId,
+                })
+                .ToListAsync();
+
+            return Ok(students);
         }
 
-        _context.Entry(student).State = EntityState.Modified;
+        // GET: api/students/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<StudentDto>> GetStudent(int id)
+        {
+            var student = await _context.Students
+                .Include(s => s.StudentType)
+                .FirstOrDefaultAsync(s => s.Id == id);
 
-        try
-        {
-            await _context.SaveChangesAsync();
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            if (!StudentExists(id))
-            {
+            if (student == null)
                 return NotFound();
-            }
-            else
+
+            return Ok(new StudentDto
             {
-                throw;
-            }
+                Id = student.Id,
+                Name = student.Name,
+                ProfilePictureUrl = student.ProfilePictureUrl,
+                StudentTypeId = student.StudentTypeId,
+            });
         }
 
-        return NoContent();
-    }
-
-    // DELETE: api/Students/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteStudent(int id)
-    {
-        var student = await _context.Students.FindAsync(id);
-        if (student == null)
+        // POST: api/students
+        [HttpPost]
+        public async Task<ActionResult<StudentDto>> CreateStudent(StudentDto studentDto)
         {
-            return NotFound();
+            var student = new Student
+            {
+                Name = studentDto.Name,
+                ProfilePictureUrl = studentDto.ProfilePictureUrl,
+                StudentTypeId = studentDto.StudentTypeId
+            };
+
+            _context.Students.Add(student);
+            await _context.SaveChangesAsync();
+
+            studentDto.Id = student.Id;
+
+            return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, studentDto);
         }
 
-        _context.Students.Remove(student);
-        await _context.SaveChangesAsync();
+        // PUT: api/students/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateStudent(int id, StudentDto studentDto)
+        {
+            if (id != studentDto.Id)
+                return BadRequest();
 
-        return NoContent();
-    }
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
+                return NotFound();
 
-    private bool StudentExists(int id)
-    {
-        return _context.Students.Any(e => e.Id == id);
+            student.Name = studentDto.Name;
+            student.ProfilePictureUrl = studentDto.ProfilePictureUrl;
+            student.StudentTypeId = studentDto.StudentTypeId;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE: api/students/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+            if (student == null)
+                return NotFound();
+
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
