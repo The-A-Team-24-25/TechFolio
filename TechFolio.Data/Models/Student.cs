@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TechFolio.Data.Models
 {
-    public class Students
+    public class Student
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
@@ -14,5 +14,8 @@ namespace TechFolio.Data.Models
         public string Picture { get; set; } // Store URL or base64
         public string Grade { get; set; }
         public string Specialty { get; set; }
+
+        public List<Project> Projects { get; set; } = new List<Project>();
+
     }
 }

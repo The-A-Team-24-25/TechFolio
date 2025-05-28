@@ -20,6 +20,10 @@ namespace TechFolio.Server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite("Data Source=app.db"));
 
+            builder.Services.AddDbContext<TechFolioDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
             var app = builder.Build();
 
             app.UseDefaultFiles();
