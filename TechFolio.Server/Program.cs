@@ -1,4 +1,4 @@
-
+using TechFolio.Data;
 using Microsoft.EntityFrameworkCore;
 using TechFolio.Server.Data;
 
@@ -14,11 +14,22 @@ namespace TechFolio.Server
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            IServiceCollection serviceCollection = builder.Services.AddDbContext<TechFolio.Data.AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<Data.AppDbContext>(options =>
                 options.UseSqlite("Data Source=app.db"));
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
+
+            app.UseCors("AllowAll");
 
             var app = builder.Build();
 
