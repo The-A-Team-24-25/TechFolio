@@ -1,62 +1,54 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthProvider";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import StudentProfile from "./pages/StudentProfile";
+import StudentOverviewPage from "./pages/StudentOverviewPage";
+import RegisterFromInvitation from "./components/RegisterFromInvitation";
+import FormAddAchievement from "./components/FormAddAchievement";
 import './App.css';
 import FormAddInterest from './components/FormAddInterest';
 
-function App() {
-    const [forecasts, setForecasts] = useState();
+const RequireAuth = ({ children }) => {
+    const { token } = useAuth();
+    return token ? children : <Navigate to="/login" />;
+};
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+const RequireRole = ({ allowedRoles, children }) => {
+    const { user } = useAuth();
+    return user && allowedRoles.includes(user.role)
+        ? children
+        : <Navigate to="/login" />;
+};
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+export const App = () => (
+    <AuthProvider>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register/:invitationId" element={<RegisterFromInvitation />} />
 
-    return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
-    
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        if (response.ok) {
-            const data = await response.json();
-            setForecasts(data);
-        }
-    }
 
-    function Mn() {
-        return (
-            <div>
-                <h1>Manage Interests</h1>
-                <FormAddInterest />
-            </div>
-        );
-    }
-}
+                <Route path="/student/profile" element={
+                    <RequireAuth>
+                        <RequireRole allowedRoles={["Student"]}>
+                            <StudentProfile />
+                        </RequireRole>
+                    </RequireAuth>
+                } />
 
-export default App;
+                <Route path="/student/overview" element={
+                    <RequireAuth>
+                        <RequireRole allowedRoles={["Teacher"]}>
+                            <StudentOverviewPage />
+                        </RequireRole>
+                    </RequireAuth>
+                } />
+
+                <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+        </BrowserRouter>
+    </AuthProvider>
+);
