@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechFolio.Server.Data;
 
@@ -11,9 +12,10 @@ using TechFolio.Server.Data;
 namespace TechFolio.Server.Migrations
 {
     [DbContext(typeof(MyProfileDbContext))]
-    partial class MyProfileDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250529201249_AddSanctionTable")]
+    partial class AddSanctionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

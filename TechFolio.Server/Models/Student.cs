@@ -3,12 +3,12 @@
     public class Student
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Class { get; set; } // или друго поле за клас
-        public string ProfilePictureUrl { get; set; } // профилна снимка, ако е необходимо
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ClassName { get; set; } = string.Empty;  // Added property for grouping by class
 
-        // Ако имаш допълнителни свойства за учениците, добави ги тук
-        public List<Sanction> Sanctions { get; set; } = new List<Sanction>(); // връзка към санкциите
+        public ICollection<Sanction> Sanctions { get; set; } = new List<Sanction>();
     }
 
 }

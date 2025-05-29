@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Controllers/StudentsController.cs
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +10,8 @@ using TechFolio.Server.Models;
 
 namespace TechFolio.Server.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class StudentsController : ControllerBase
     {
         private readonly MyProfileDbContext _context;
@@ -20,94 +21,94 @@ namespace TechFolio.Server.Controllers
             _context = context;
         }
 
-        // GET: api/students
+        // GET: api/Students
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentDto>>> GetStudents()
+        public async Task<ActionResult<IEnumerable<StudentDto>>> GetAll()
         {
-            var students = await _context.Students
-                .Select(s => new StudentDto
+            var students = await _context.Students.ToListAsync();
+            var dtos = students.Select(s => new StudentDto
+            {
+                Id = s.Id,
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                Email = s.Email,
+                ClassName = s.ClassName
+            }).ToList();
+
+            return Ok(dtos);
+        }
+
+        // GET: api/Students/grouped-by-class
+        [HttpGet("grouped-by-class")]
+        public async Task<ActionResult<IEnumerable<StudentGroupDto>>> GetGroupedByClass()
+        {
+            var students = await _context.Students.ToListAsync();
+
+            var groups = students
+                .GroupBy(s => s.ClassName)
+                .Select(g => new StudentGroupDto
                 {
-                    Id = s.Id,
-                    Name = s.Name,
-                    Class = s.Class,
-                    ProfilePictureUrl = s.ProfilePictureUrl
+                    ClassName = g.Key,
+                    Students = g.Select(s => new StudentDto
+                    {
+                        Id = s.Id,
+                        FirstName = s.FirstName,
+                        LastName = s.LastName,
+                        Email = s.Email,
+                        ClassName = s.ClassName
+                    }).ToList()
                 })
-                .ToListAsync();
+                .OrderBy(g => g.ClassName)
+                .ToList();
 
-            return Ok(students);
+            return Ok(groups);
         }
 
-        // GET: api/students/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StudentDto>> GetStudent(int id)
-        {
-            var student = await _context.Students.FindAsync(id);
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(new StudentDto
-            {
-                Id = student.Id,
-                Name = student.Name,
-                Class = student.Class,
-                ProfilePictureUrl = student.ProfilePictureUrl
-            });
-        }
-
-        // POST: api/students
+        // POST: api/Students
         [HttpPost]
-        public async Task<ActionResult<StudentDto>> CreateStudent(StudentDto studentDto)
+        public async Task<ActionResult<StudentDto>> Create(StudentDto input)
         {
             var student = new Student
             {
-                Name = studentDto.Name,
-                Class = studentDto.Class,
-                ProfilePictureUrl = studentDto.ProfilePictureUrl
+                FirstName = input.FirstName,
+                LastName = input.LastName,
+                Email = input.Email,
+                ClassName = input.ClassName
             };
 
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
 
-            studentDto.Id = student.Id;
-
-            return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, studentDto);
+            input.Id = student.Id;
+            return CreatedAtAction(nameof(GetAll), new { id = student.Id }, input);
         }
 
-        // PUT: api/students/5
+        // PUT: api/Students/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(int id, StudentDto studentDto)
+        public async Task<IActionResult> Update(int id, StudentDto input)
         {
-            if (id != studentDto.Id)
-            {
-                return BadRequest();
-            }
-
             var student = await _context.Students.FindAsync(id);
             if (student == null)
-            {
                 return NotFound();
-            }
 
-            student.Name = studentDto.Name;
-            student.Class = studentDto.Class;
-            student.ProfilePictureUrl = studentDto.ProfilePictureUrl;
+            student.FirstName = input.FirstName;
+            student.LastName = input.LastName;
+            student.Email = input.Email;
+            student.ClassName = input.ClassName;
 
+            _context.Students.Update(student);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        // DELETE: api/students/5
+        // DELETE: api/Students/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var student = await _context.Students.FindAsync(id);
             if (student == null)
-            {
                 return NotFound();
-            }
 
             _context.Students.Remove(student);
             await _context.SaveChangesAsync();
