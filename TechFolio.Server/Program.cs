@@ -47,6 +47,9 @@ namespace TechFolio.Server
             });
 
             builder.Services.AddScoped<JwtService>();
+
+            builder.Services.AddScoped<IGoalService, GoalService>();
+
         }
     }
 }
