@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using TechFolio.Data.Models;
-using TechFolio.Server.Data;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace TechFolio.Server.Controllers
 {
@@ -12,88 +7,52 @@ namespace TechFolio.Server.Controllers
     [Route("api/[controller]")]
     public class GoalsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IGoalService _goalService;
 
-        public GoalsController(AppDbContext context)
+        public GoalsController(IGoalService goalService)
         {
-            _context = context;
+            _goalService = goalService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GoalsDto>>> GetGoals()
         {
-            return await _context.Goals
-                .Select(g => new GoalsDto
-                {
-                    Id = g.Id,
-                    Title = g.Title,
-                    Description = g.Description,
-                    Type = g.Type,
-                    IsApproved = g.IsApproved
-                })
-                .ToListAsync();
+            var goals = await _goalService.GetAllGoalsAsync();
+            return Ok(goals);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GoalsDto>> GetGoal(int id)
         {
-            var goal = await _context.Goals.FindAsync(id);
+            var goal = await _goalService.GetGoalByIdAsync(id);
             if (goal == null) return NotFound();
 
-            return new GoalsDto
-            {
-                Id = goal.Id,
-                Title = goal.Title,
-                Description = goal.Description,
-                Type = goal.Type,
-                IsApproved = goal.IsApproved
-            };
+            return Ok(goal);
         }
 
         [HttpPost]
         public async Task<ActionResult<GoalsDto>> CreateGoal([FromBody] GoalsDto dto)
         {
-            var goal = new Goal
-            {
-                Title = dto.Title,
-                Description = dto.Description,
-                Type = dto.Type,
-                IsApproved = dto.IsApproved
-            };
-
-            _context.Goals.Add(goal);
-            await _context.SaveChangesAsync();
-
-            dto.Id = goal.Id;
-            return CreatedAtAction(nameof(GetGoal), new { id = dto.Id }, dto);
+            var created = await _goalService.CreateGoalAsync(dto);
+            return CreatedAtAction(nameof(GetGoal), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGoal(int id, [FromBody] GoalsDto dto)
         {
-            var goal = await _context.Goals.FindAsync(id);
-            if (goal == null) return NotFound();
+            var success = await _goalService.UpdateGoalAsync(id, dto);
+            if (!success) return NotFound();
 
-            goal.Title = dto.Title;
-            goal.Description = dto.Description;
-            goal.Type = dto.Type;
-            goal.IsApproved = dto.IsApproved;
-
-            await _context.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGoal(int id)
         {
-            var goal = await _context.Goals.FindAsync(id);
-            if (goal == null) return NotFound();
+            var success = await _goalService.DeleteGoalAsync(id);
+            if (!success) return NotFound();
 
-            _context.Goals.Remove(goal);
-            await _context.SaveChangesAsync();
             return NoContent();
         }
     }
-
 }
-
