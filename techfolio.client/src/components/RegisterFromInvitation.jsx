@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "../useForm";
-import { registerFromInvitation } from "../services/api";
+import { registerFromInvitation } from "../services/api.js";
 
 export const RegisterFromInvitation = () => {
     const { formData, handleChange, handleSubmit } = useForm(onSubmit, {

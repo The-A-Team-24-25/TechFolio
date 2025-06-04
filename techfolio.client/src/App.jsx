@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./context/AuthProvider";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import StudentProfile from "./pages/StudentProfile";
-import StudentOverviewPage from "./pages/StudentOverviewPage";
-import RegisterFromInvitation from "./components/RegisterFromInvitation";
+import { AuthProvider, useAuth } from "./context/AuthProvider.jsx";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import StudentProfile from "./pages/StudentProfile.jsx";
+import StudentOverviewPage from "./pages/StudentOverviewPage.jsx";
+import RegisterFromInvitation from "./components/RegisterFromInvitation.jsx";
 
 const RequireAuth = ({ children }) => {
     const { token } = useAuth();

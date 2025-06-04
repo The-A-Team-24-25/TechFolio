@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useForm } from "../useForm";
-import { submitStudentProfile } from "../services/api";
+import { submitStudentProfile } from "../services/api.js";
 
 export const StudentProfile = () => {
     const { formData, handleChange, handleSubmit } = useForm(onSubmit, {
