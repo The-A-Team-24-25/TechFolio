@@ -7,16 +7,8 @@ import Dashboard from "./pages/Dashboard.jsx";
 import StudentProfile from "./pages/StudentProfile.jsx";
 import StudentOverviewPage from "./pages/StudentOverviewPage.jsx";
 import RegisterFromInvitation from "./components/RegisterFromInvitation.jsx";
-=======
-import { AuthProvider, useAuth } from "./context/AuthProvider";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import StudentProfile from "./pages/StudentProfile";
-import StudentOverviewPage from "./pages/StudentOverviewPage";
-import RegisterFromInvitation from "./components/RegisterFromInvitation";
-import FormAddAchievement from "./components/FormAddAchievement";
 import './App.css';
->>>>>>> 7e604f4fcfb468cffc2672eb00423c09ee3da8cd
+
 
 const RequireAuth = ({ children }) => {
     const { token } = useAuth();
